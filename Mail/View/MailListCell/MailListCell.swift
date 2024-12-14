@@ -178,29 +178,50 @@ final class MailListCell: UITableViewCell {
 }
 
 
-struct MailListCellPreview_Previews: PreviewProvider {
-    /// - note: previewsはstaticなプロパティとして定義されているため、インスタンスの変数や状態を保持できない→view生成後のプロパティ変更ができない→クロージャ内部でviewModelをセット
-    ///  また、Viewはstructを基盤としているため、イミュータブルな設計になっている→Viewの中でプロパティ変更ができない
-    static var previews: some View {
-        let viewModel: MailListCellViewModel = .init(
-            mail: Mail(
-                id: UUID(),
-                sender: "送信者",
-                recipient: "受信者",
-                subject: "件名",
-                body: "本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文",
-                isRead: false,
-                timestamp: Date.now
-            )
+//struct MailListCellPreview_Previews: PreviewProvider {
+//    /// - note: previewsはstaticなプロパティとして定義されているため、インスタンスの変数や状態を保持できない→view生成後のプロパティ変更ができない→クロージャ内部でviewModelをセット
+//    ///  また、Viewはstructを基盤としているため、イミュータブルな設計になっている→Viewの中でプロパティ変更ができない
+//    static var previews: some View {
+//        let viewModel: MailListCellViewModel = .init(
+//            mail: Mail(
+//                id: UUID(),
+//                sender: "送信者",
+//                recipient: "受信者",
+//                subject: "件名",
+//                body: "本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文",
+//                isRead: false,
+//                timestamp: Date.now
+//            )
+//        )
+//        let view: MailListCell = {
+//            let view: MailListCell = .init(style: .default, reuseIdentifier: nil)
+//            view.viewModel = viewModel
+//            return view
+//        }()
+//        UIViewWrapper(view: view)
+//            .frame(width: .infinity,height: 150)
+//            .previewLayout(.sizeThatFits)
+//    }
+//}
+
+#Preview(traits: .sizeThatFitsLayout) {
+    let viewModel: MailListCellViewModel = .init(
+        mail: Mail(
+            id: UUID(),
+            sender: "送信者",
+            recipient: "受信者",
+            subject: "件名",
+            body: "本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文",
+            isRead: false,
+            timestamp: Date.now
         )
-        let view: MailListCell = {
-            let view: MailListCell = .init(style: .default, reuseIdentifier: nil)
-            view.viewModel = viewModel
-            return view
-        }()
-        UIViewWrapper(view: view)
-            .frame(width: .infinity,height: 150)
-            .previewLayout(.sizeThatFits)
-    }
+    )
+    let view: MailListCell = {
+        let view: MailListCell = .init(style: .default, reuseIdentifier: nil)
+        view.viewModel = viewModel
+        return view
+    }()
+    UIViewWrapper(view: view)
+        .frame(width: .infinity,height: 150)
 }
 
