@@ -12,21 +12,21 @@ final class MailListCell: UITableViewCell {
     }
     
     /// メールの送信者ラベル
-    let senderLabel: UILabel = {
+    private let senderLabel: UILabel = {
         let label: UILabel = .init(
             font: .systemFont(ofSize: 18, weight: .bold)
         )
         return label
     }()
     /// メールの件名ラベル
-    let subjectLabel: UILabel = {
+    private let subjectLabel: UILabel = {
         let label: UILabel = .init(
             font: .systemFont(ofSize: 16, weight: .regular)
         )
         return label
     }()
     /// メールの本文ラベル
-    let bodyLabel: UILabel = {
+    private let bodyLabel: UILabel = {
         let label: UILabel = .init(
             font: .systemFont(ofSize: 16, weight: .regular),
             textColor: .secondaryLabel,
@@ -35,7 +35,7 @@ final class MailListCell: UITableViewCell {
         return label
     }()
     /// 受信日時ラベル
-    let timestampLabel: UILabel = {
+    private let timestampLabel: UILabel = {
         let label: UILabel = .init(
             font: .systemFont(ofSize: 16, weight: .regular),
             textColor: .secondaryLabel
@@ -43,25 +43,25 @@ final class MailListCell: UITableViewCell {
         return label
     }()
     /// 矢印イメージ
-    let arrorImage: UIImageView = {
+    private let arrorImage: UIImageView = {
         let image: UIImageView = .init()
         image.image = .rightArrow
         return image
     }()
     /// 未読イメージ
-    let unreadImage: UIImageView = {
+    private let unreadImage: UIImageView = {
         let image: UIImageView = .init()
         image.image = .unreadCircle
         return image
     }()
     /// 既読イメージ
-    let readImage: UIImageView = {
+    private let readImage: UIImageView = {
         let image: UIImageView = .init()
         image.image = .readCircle
         return image
     }()
     /// ディバイダーイメージ
-    let dividerImage: UIImageView = {
+    private let dividerImage: UIImageView = {
         let image: UIImageView = .init()
         image.image = .divider
         return image
@@ -78,7 +78,7 @@ final class MailListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func layout() {
+    private func layout() {
         senderLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         senderLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 
