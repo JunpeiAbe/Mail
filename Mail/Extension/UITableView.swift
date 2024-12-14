@@ -7,8 +7,8 @@ extension UITableView {
         self.register(cellType, forCellReuseIdentifier: identifier)
     }
     /// セルを再利用する
-    func dequeReusableCell<T: UITableViewCell>(for indexPath: IndexPath) -> T {
-        let identifier = String(describing: T.self)
+    func dequeReusableCell<T: UITableViewCell>(_ cellType: T.Type, for indexPath: IndexPath) -> T {
+        let identifier = String(describing: cellType)
         guard let cell = self.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? T else {
             fatalError("Error: Could not dequeue cell with identifier \(identifier)")
         }
