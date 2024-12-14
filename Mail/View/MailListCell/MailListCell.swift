@@ -99,7 +99,6 @@ final class MailListCell: UITableViewCell {
         let leftSideStackView = UIStackView(
             arrangedSubviews: [unreadImage],
             axis: .horizontal,
-            spacing: 0,
             distribution: .fill,
             alignment: .top
         )
@@ -126,7 +125,6 @@ final class MailListCell: UITableViewCell {
                 dividerImage
             ],
             axis: .vertical,
-            spacing: 0,
             distribution: .fill,
             alignment: .fill
         )
@@ -137,7 +135,8 @@ final class MailListCell: UITableViewCell {
                 dividerStackview
             ],
             axis: .vertical,
-            spacing: 16
+            spacing: 8,
+            directionalLayoutMargins: .init(top: 16, leading: 16, bottom: 16, trailing: 16)
         )
         
         // overallStackViewをコンテンツビューに追加
@@ -148,11 +147,7 @@ final class MailListCell: UITableViewCell {
             top: contentView.topAnchor,
             left: contentView.leadingAnchor,
             bottom: contentView.bottomAnchor,
-            right: contentView.trailingAnchor,
-            paddingTop: 16,
-            paddingLeft: 16,
-            paddingBottom: 16,
-            paddingRight: 16
+            right: contentView.trailingAnchor
         )
         
         unreadImage.anchor(

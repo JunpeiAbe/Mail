@@ -11,13 +11,17 @@ extension UIStackView {
     convenience init(
         arrangedSubviews: [UIView],
         axis: NSLayoutConstraint.Axis,
-        spacing: CGFloat,
+        spacing: CGFloat = .zero,
+        isLayoutMarginsRelativeArrangement: Bool = true,
+        directionalLayoutMargins: NSDirectionalEdgeInsets = .zero,
         distribution: UIStackView.Distribution = .fill,
         alignment: UIStackView.Alignment = .fill
     ) {
         self.init(arrangedSubviews: arrangedSubviews)
         self.axis = axis
         self.spacing = spacing
+        self.isLayoutMarginsRelativeArrangement = isLayoutMarginsRelativeArrangement
+        self.directionalLayoutMargins = directionalLayoutMargins
         self.distribution = distribution
         self.alignment = alignment
     }
