@@ -43,4 +43,14 @@ extension UITableView {
             self.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
+    /// リフレッシュコントロールを追加
+    func addRefreshControl(target: Any?, action: Selector) {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(target, action: action, for: .valueChanged)
+        self.refreshControl = refreshControl
+    }
+    /// リフレッシュコントロールの動作を終了
+    func endRefreshing() {
+        self.refreshControl?.endRefreshing()
+    }
 }

@@ -1,7 +1,7 @@
 import UIKit
 
 /// メールリストのテーブルビュー
-final class MailTableView: UITableView {
+final class MailListTableView: UITableView {
     
     /// - note: データ配列をCellViewModelとして保持
     var viewModels: [MailListCellViewModel] = [] {
@@ -9,6 +9,8 @@ final class MailTableView: UITableView {
             reload()
         }
     }
+    
+    weak var mailListDelegate: MailListTableViewDelegate?
     
     private init() {
         super.init(frame: .zero, style: .plain)
@@ -25,17 +27,27 @@ final class MailTableView: UITableView {
         delegate = self
         // セルの登録
         registerCell(MailListCell.self)
+        // リフレッシュコントロールの登録
+        addRefreshControl(target: self, action: #selector(handleRefresh))
+    }
+    @objc func handleRefresh() {
+        mailListDelegate?.pullToReflesh()
+    }
+    /// リフレッシュの終了
+    func finishRefresh() {
+        endRefreshing()
     }
 }
 
-extension MailTableView: UITableViewDelegate {
+extension MailListTableView: UITableViewDelegate {
     // セル選択時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        mailListDelegate?.didSelectCell(viewModels[indexPath.row])
         print("cell selected:\(indexPath.row)")
     }
 }
 
-extension MailTableView: UITableViewDataSource {
+extension MailListTableView: UITableViewDataSource {
     // セルの要素を指定
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels.count
