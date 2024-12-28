@@ -19,7 +19,6 @@ final class MailListControllerViewModel {
             // 初期データの取得
             // 最後のIDはnilで全件取得
             await fetchMailData(lastID: nil)
-            onDataUpdate?()
         }
     }
     /// リストを追加取得する
@@ -30,7 +29,6 @@ final class MailListControllerViewModel {
             // 現在の最後のIDを取得
             let lastID: String? = cellViewModels.last?.mail.id.uuidString
             await fetchMailData(lastID: lastID)
-            onDataUpdate?()
         }
     }
     /// リストの初期化
