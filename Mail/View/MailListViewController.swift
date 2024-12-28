@@ -41,6 +41,11 @@ extension MailListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("cell selected:\(indexPath.row)")
     }
+    // 任意のセルが表示された場合
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // データの追加読み込み
+        print("cell load more")
+    }
 }
 
 // MARK: UITableViewDataSource
