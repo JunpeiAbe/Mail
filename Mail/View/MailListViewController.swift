@@ -24,7 +24,7 @@ final class MailListViewController: UIViewController {
         viewModel.firstLoad()
         // pull to reflesh
         tableView.onRefresh = { [weak self] in
-            self?.viewModel.firstLoad()
+            self?.viewModel.refresh()
         }
         // viewModelのデータ更新
         viewModel.onDataUpdate = { [weak self] in
@@ -66,7 +66,7 @@ extension MailListViewController: UITableViewDataSource {
     // セルを作成
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeReusableCell(MailListCell.self, for: indexPath)
-        cell.viewModel = viewModel.cellViewModels[indexPath.row]
+        cell.viewModel = viewModel.cellViewModels.count > 0 ? viewModel.cellViewModels[indexPath.row] : nil
         return cell
     }
     // セルの高さを指定

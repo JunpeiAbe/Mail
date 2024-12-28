@@ -33,6 +33,11 @@ final class MailListControllerViewModel {
             onDataUpdate?()
         }
     }
+    /// リストの初期化
+    func refresh() {
+        cellViewModels = []
+        firstLoad()
+    }
     
     private func fetchMailData(lastID: String?) async {
         isLoading = true
