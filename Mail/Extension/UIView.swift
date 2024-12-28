@@ -36,5 +36,25 @@ extension UIView {
             self.heightAnchor.constraint(equalToConstant: height).isActive = true
         }
     }
+    /// 指定したビューに対して中央に配置する制約を設定する
+    func centerInSuperview(offsetX: CGFloat = 0, offsetY: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil) {
+        guard let superview = self.superview else {
+            print("Superviewがありません")
+            return
+        }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 中央揃えの制約を設定
+        self.centerXAnchor.constraint(equalTo: superview.centerXAnchor, constant: offsetX).isActive = true
+        self.centerYAnchor.constraint(equalTo: superview.centerYAnchor, constant: offsetY).isActive = true
+        
+        // サイズ制約を設定
+        if let width = width {
+            self.widthAnchor.constraint(equalToConstant: width).isActive = true
+        }
+        if let height = height {
+            self.heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
+    }
 }
 

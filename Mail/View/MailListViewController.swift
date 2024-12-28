@@ -9,6 +9,13 @@ final class MailListViewController: UIViewController {
         return tableView
     }()
     
+    let loadingIndicator: UIActivityIndicatorView = {
+        let indicator: UIActivityIndicatorView = .init()
+        indicator.color = .lightGray
+        indicator.transform = .init(scaleX: 2, y: 2)
+        return indicator
+    }()
+    
     let viewModel = MailListControllerViewModel()
 
     override func viewDidLoad() {
@@ -21,6 +28,7 @@ final class MailListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         // 初回読み込み
+        loadingIndicator.startAnimating()
         viewModel.firstLoad()
         // pull to reflesh
         tableView.onRefresh = { [weak self] in
@@ -30,6 +38,7 @@ final class MailListViewController: UIViewController {
         viewModel.onDataUpdate = { [weak self] in
             self?.tableView.reloadData()
             self?.tableView.finishRefresh()
+            self?.loadingIndicator.stopAnimating()
         }
     }
     
@@ -39,6 +48,8 @@ final class MailListViewController: UIViewController {
             axis: .horizontal
         )
         view.addSubview(mainStackView)
+        view.addSubview(loadingIndicator)
+        loadingIndicator.centerInSuperview()
         mainStackView.anchor(top: view.topAnchor,left: view.leadingAnchor,bottom: view.bottomAnchor, right: view.trailingAnchor)
     }
 }
