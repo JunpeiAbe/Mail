@@ -8,6 +8,8 @@ final class MailListViewController: UIViewController {
         let tableView: MailListTableView = .init()
         return tableView
     }()
+    
+    let viewModel = MailListControllerViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,9 +20,16 @@ final class MailListViewController: UIViewController {
     private func setup() {
         tableView.delegate = self
         tableView.dataSource = self
+        // 初回読み込み
+        viewModel.firstLoad()
         // pull to reflesh
         tableView.onRefresh = { [weak self] in
-            // - TODO: viewModelに定義したリロード処理を行う
+            self?.viewModel.firstLoad()
+        }
+        // viewModelのデータ更新
+        viewModel.onDataUpdate = { [weak self] in
+            self?.tableView.reloadData()
+            self?.tableView.finishRefresh()
         }
     }
     
@@ -45,6 +54,7 @@ extension MailListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // データの追加読み込み
         print("cell load more")
+        viewModel.moreLoad()
     }
 }
 
@@ -52,12 +62,12 @@ extension MailListViewController: UITableViewDelegate {
 extension MailListViewController: UITableViewDataSource {
     // セルの要素を指定
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // - TODO: viewModelに定義したリストに差し替える
-        return 0
+        return viewModel.cellViewModels.count
     }
     // セルを作成
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeReusableCell(MailListCell.self, for: indexPath)
+        cell.viewModel = viewModel.cellViewModels[indexPath.row]
         return cell
     }
     // セルの高さを指定
