@@ -110,6 +110,11 @@ final class MailListCell: UITableViewCell {
             distribution: .fill,
             alignment: .top
         )
+        mainStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        mainStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+        rightSideStackView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        rightSideStackView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
         // メインレイアウト（左右の配置）
         let overallStackView = UIStackView(
@@ -136,7 +141,7 @@ final class MailListCell: UITableViewCell {
             ],
             axis: .vertical,
             spacing: 8,
-            directionalLayoutMargins: .init(top: 16, leading: 16, bottom: 16, trailing: 16)
+            directionalLayoutMargins: .init(top: 16, leading: 16, bottom: 0, trailing: 16)
         )
         
         // overallStackViewをコンテンツビューに追加

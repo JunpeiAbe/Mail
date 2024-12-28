@@ -38,7 +38,6 @@ final class MailListViewController: UIViewController {
             arrangedSubviews: [tableView],
             axis: .horizontal
         )
-        tableView.backgroundColor = .blue
         view.addSubview(mainStackView)
         mainStackView.anchor(top: view.topAnchor,left: view.leadingAnchor,bottom: view.bottomAnchor, right: view.trailingAnchor)
     }

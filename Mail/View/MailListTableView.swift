@@ -1,5 +1,4 @@
 import UIKit
-
 /// メールリストのテーブルビュー
 final class MailListTableView: UITableView {
 
@@ -20,6 +19,9 @@ final class MailListTableView: UITableView {
         registerCell(MailListCell.self)
         // リフレッシュコントロールの登録
         addRefreshControl(target: self, action: #selector(handleRefresh))
+        // レイアウトの設定
+        self.separatorStyle = .none
+        self.indicatorStyle = .black
     }
     @objc func handleRefresh() {
         onRefresh?()
