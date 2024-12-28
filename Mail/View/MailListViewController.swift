@@ -58,6 +58,9 @@ final class MailListViewController: UIViewController {
 extension MailListViewController: UITableViewDelegate {
     // セル選択時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.cellViewModels[indexPath.row].mail.isRead = true
+        // セルのレイアウトを更新
+        tableView.reloadRows(at: [indexPath], with: .fade)
         print("cell selected:\(indexPath.row)")
     }
     // 任意のセルが表示された場合

@@ -5,7 +5,7 @@ import Combine
 final class MailListCellViewModel {
     
     /// メールモデル
-    let mail: Mail
+    var mail: Mail
     /// 送信者
     var sender: String {
         mail.sender

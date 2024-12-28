@@ -48,16 +48,10 @@ final class MailListCell: UITableViewCell {
         image.image = .rightArrow
         return image
     }()
-    /// 未読イメージ
-    private let unreadImage: UIImageView = {
+    /// 未読既読状態イメージ
+    private let readStateImage: UIImageView = {
         let image: UIImageView = .init()
         image.image = .unreadCircle
-        return image
-    }()
-    /// 既読イメージ
-    private let readImage: UIImageView = {
-        let image: UIImageView = .init()
-        image.image = .readCircle
         return image
     }()
     /// ディバイダーイメージ
@@ -97,7 +91,7 @@ final class MailListCell: UITableViewCell {
             alignment: .fill
         )
         let leftSideStackView = UIStackView(
-            arrangedSubviews: [unreadImage],
+            arrangedSubviews: [readStateImage],
             axis: .horizontal,
             distribution: .fill,
             alignment: .top
@@ -155,7 +149,7 @@ final class MailListCell: UITableViewCell {
             right: contentView.trailingAnchor
         )
         
-        unreadImage.anchor(
+        readStateImage.anchor(
             width: 16,
             height: 16
         )
@@ -174,6 +168,7 @@ final class MailListCell: UITableViewCell {
         subjectLabel.text = viewModel.subject
         bodyLabel.text = viewModel.body
         timestampLabel.text = viewModel.timestamp
+        readStateImage.image = viewModel.isRead ? .readCircle : .unreadCircle
     }
 }
 
