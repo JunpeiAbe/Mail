@@ -25,6 +25,9 @@ final class MailListViewController: UIViewController {
     }
     
     private func setup() {
+        // navigation
+        setupNavigationBar()
+        // tableview
         tableView.delegate = self
         tableView.dataSource = self
         // 初回読み込み
@@ -51,6 +54,30 @@ final class MailListViewController: UIViewController {
         view.addSubview(loadingIndicator)
         loadingIndicator.centerInSuperview()
         mainStackView.anchor(top: view.topAnchor,left: view.leadingAnchor,bottom: view.bottomAnchor, right: view.trailingAnchor)
+    }
+    
+    private func setupNavigationBar() {
+        title = "メールリスト"
+        setNavigationBarUnderline()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "編集", style: .plain, target: self, action: #selector(editButtonTapped)
+        )
+    }
+    
+    /// ナビゲーションバーの下に線が表示されるようにする
+    // TODO: 設定値の意味を調べる
+    func setNavigationBarUnderline() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        self.navigationItem.standardAppearance = appearance
+        self.navigationItem.scrollEdgeAppearance = appearance
+        self.navigationItem.compactAppearance = appearance
+        self.navigationItem.compactScrollEdgeAppearance = appearance
+    }
+    
+    @objc private func editButtonTapped() {
+        print("編集ボタンがタップされました")
     }
 }
     
@@ -96,6 +123,7 @@ extension MailListViewController: UITableViewDataSource {
 // MARK: Preview
 #Preview(traits: .sizeThatFitsLayout) {
     let viewController = MailListViewController()
-    UIViewControllerWrapper(viewController: viewController)
+    let navigationController = UINavigationController(rootViewController: viewController)
+    UIViewControllerWrapper(viewController: navigationController)
 }
 
