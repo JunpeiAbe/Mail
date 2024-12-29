@@ -24,7 +24,10 @@ final class MailListControllerViewModel {
     /// リストを追加取得する
     func moreLoad() {
         // ローディング中でない、最大読み込み件数未満の場合通す
-        guard !isLoading, cellViewModels.count < maxItems else { return }
+        guard !isLoading, cellViewModels.count < maxItems else {
+            print("cannot moreLoad")
+            return
+        }
         Task {
             // 現在の最後のIDを取得
             let lastID: String? = cellViewModels.last?.mail.id.uuidString

@@ -65,9 +65,13 @@ extension MailListViewController: UITableViewDelegate {
     }
     // 任意のセルが表示された場合
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // データの追加読み込み
-        print("cell load more")
-        viewModel.moreLoad()
+        // 任意のセルが表示された時のみデータの追加読み込み
+        // セルビューモデルリストの最後のデータのIDと表示したセルのIDが一致した時のみ読み込み
+        guard let lastID = viewModel.cellViewModels.last?.mail.id else { return }
+        let currentID = viewModel.cellViewModels[indexPath.row].mail.id
+        if currentID == lastID {
+            viewModel.moreLoad()
+        }
     }
 }
 
