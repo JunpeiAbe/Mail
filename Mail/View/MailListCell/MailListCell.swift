@@ -182,6 +182,7 @@ final class MailListCell: UITableViewCell {
     func configure() {
         guard let viewModel = viewModel else { return }
         checkStateImage.isHidden = !viewModel.isEditing
+        checkStateImage.image = viewModel.isChecked ? .selectedCheckmark : .emptyCheckmark
         senderLabel.text = viewModel.sender
         subjectLabel.text = viewModel.subject
         bodyLabel.text = viewModel.body

@@ -30,6 +30,7 @@ final class MailListViewController: UIViewController {
         // tableview
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsSelectionDuringEditing = true // 編集モード時の選択を有効化
         // 初回読み込み
         loadingIndicator.startAnimating()
         viewModel.firstLoad()
@@ -92,7 +93,13 @@ final class MailListViewController: UIViewController {
 extension MailListViewController: UITableViewDelegate {
     // セル選択時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.cellViewModels[indexPath.row].mail.isRead = true
+        // チェック状態の更新(編集状態でのみ更新)
+        if tableView.isEditing {
+            viewModel.cellViewModels[indexPath.row].isChecked.toggle()
+        } else {
+            // 未読→既読へ更新(編集状態でない場合のみ)
+            viewModel.cellViewModels[indexPath.row].mail.isRead = true
+        }
         // セルのレイアウトを更新
         tableView.reloadRows(at: [indexPath], with: .fade)
         print("cell selected:\(indexPath.row)")
