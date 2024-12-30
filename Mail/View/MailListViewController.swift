@@ -78,6 +78,8 @@ final class MailListViewController: UIViewController {
     
     @objc private func editButtonTapped() {
         print("編集ボタンがタップされました")
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "キャンセル" : "編集"
     }
 }
     
@@ -99,6 +101,14 @@ extension MailListViewController: UITableViewDelegate {
         if currentID == lastID {
             viewModel.moreLoad()
         }
+    }
+    // 編集状態での左側のアイコン表示(defaultはdelete)
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    // 編集状態での左側の余白追加をするかどうか(defaultはtrue)
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
 }
 

@@ -10,7 +10,12 @@ final class MailListCell: UITableViewCell {
             configure()
         }
     }
-    
+    /// 選択状態を示すイメージ(編集時のみ表示)
+    private let checkStateImage: UIImageView = {
+        let image: UIImageView = .init()
+        image.image = .emptyCheckmark
+        return image
+    }()
     /// メールの送信者ラベル
     private let senderLabel: UILabel = {
         let label: UILabel = .init(
@@ -90,6 +95,13 @@ final class MailListCell: UITableViewCell {
             distribution: .fill,
             alignment: .fill
         )
+        // チェック画像を表示用のスタックビュー
+        let checkStateStackView = UIStackView(
+            arrangedSubviews: [checkStateImage],
+            axis: .horizontal,
+            distribution: .fill,
+            alignment: .center
+        )
         let leftSideStackView = UIStackView(
             arrangedSubviews: [readStateImage],
             axis: .horizontal,
@@ -112,7 +124,7 @@ final class MailListCell: UITableViewCell {
         
         // メインレイアウト（左右の配置）
         let overallStackView = UIStackView(
-            arrangedSubviews: [leftSideStackView, mainStackView, rightSideStackView],
+            arrangedSubviews: [checkStateStackView, leftSideStackView, mainStackView, rightSideStackView],
             axis: .horizontal,
             spacing: 10,
             distribution: .fill,
@@ -149,6 +161,11 @@ final class MailListCell: UITableViewCell {
             right: contentView.trailingAnchor
         )
         
+        checkStateImage.anchor(
+            width: 24,
+            height: 24
+        )
+        
         readStateImage.anchor(
             width: 16,
             height: 16
@@ -164,6 +181,7 @@ final class MailListCell: UITableViewCell {
     
     func configure() {
         guard let viewModel = viewModel else { return }
+        checkStateImage.isHidden = true
         senderLabel.text = viewModel.sender
         subjectLabel.text = viewModel.subject
         bodyLabel.text = viewModel.body
