@@ -66,6 +66,8 @@ final class MailListViewController: UIViewController {
     private func setupNavigationBar() {
         title = "メールリスト"
         setNavigationBarUnderline()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "削除", style: .plain, target: self, action: #selector(deleteButtonTapped))
+        navigationItem.leftBarButtonItem?.isHidden = !tableView.isEditing
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "編集", style: .plain, target: self, action: #selector(editButtonTapped)
         )
@@ -87,6 +89,7 @@ final class MailListViewController: UIViewController {
         print("編集ボタンがタップされました")
         tableView.setEditing(!tableView.isEditing, animated: true)
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "キャンセル" : "編集"
+        navigationItem.leftBarButtonItem?.isHidden = !tableView.isEditing
         // 編集状態の際にボタンタップでチェック状態を初期化
         if tableView.isEditing {
             viewModel.cellViewModels.forEach {
@@ -98,6 +101,9 @@ final class MailListViewController: UIViewController {
             $0.isEditing = tableView.isEditing
         }
         tableView.reload()
+    }
+    @objc private func deleteButtonTapped() {
+        viewModel.removeCheckedMail()
     }
 }
     

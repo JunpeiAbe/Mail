@@ -56,4 +56,19 @@ final class MailListControllerViewModel {
         onDataUpdate?()
         isLoading = false
     }
+    
+    /// チェック済みのリストデータの削除
+    /// - note: APIは実行せず、表示上のみ削除(実際は削除APIのようなものを実行する)
+    func removeCheckedMail() {
+        // チェック済みのセルのIDを取得
+        let checkedIDs = cellViewModels.filter({ $0.isChecked }).map {
+            $0.mail.id
+        }
+        guard checkedIDs.count != .zero else { return }
+        print("check",checkedIDs)
+        // cellViewModelsにcheckdIDs以外のリストを追加
+        cellViewModels = cellViewModels.filter { !checkedIDs.contains($0.mail.id) }
+        print("remove after count",cellViewModels.count)
+        onDataUpdate?()
+    }
 }
