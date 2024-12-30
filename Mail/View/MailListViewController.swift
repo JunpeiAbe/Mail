@@ -16,6 +16,39 @@ final class MailListViewController: UIViewController {
         return indicator
     }()
     
+    /// 削除ボタン
+    lazy var deleteButton: UIBarButtonItem = {
+        let item: UIBarButtonItem = .init(
+            title: "削除",
+            style: .plain,
+            target: self,
+            action: #selector(deleteButtonTapped)
+        )
+        return item
+    }()
+
+    /// 編集ボタン
+    lazy var editButton: UIBarButtonItem = {
+        let item: UIBarButtonItem = .init(
+            title: "編集",
+            style: .plain,
+            target: self,
+            action: #selector(editButtonTapped)
+        )
+        return item
+    }()
+
+    /// フィルターボタン
+    lazy var filterButton: UIBarButtonItem = {
+        let item: UIBarButtonItem = .init(
+            image: .filterButton,
+            style: .plain,
+            target: self,
+            action: #selector(filterButtonTapped)
+        )
+        return item
+    }()
+    
     let viewModel = MailListControllerViewModel()
 
     override func viewDidLoad() {
@@ -66,11 +99,9 @@ final class MailListViewController: UIViewController {
     private func setupNavigationBar() {
         title = "メールリスト"
         setNavigationBarUnderline()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "削除", style: .plain, target: self, action: #selector(deleteButtonTapped))
-        navigationItem.leftBarButtonItem?.isHidden = !tableView.isEditing
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "編集", style: .plain, target: self, action: #selector(editButtonTapped)
-        )
+        navigationItem.leftBarButtonItems = [filterButton, deleteButton]
+        deleteButton.isHidden = !tableView.isEditing
+        navigationItem.rightBarButtonItems = [editButton]
     }
     
     /// ナビゲーションバーの下に線が表示されるようにする
@@ -86,10 +117,9 @@ final class MailListViewController: UIViewController {
     }
     
     @objc private func editButtonTapped() {
-        print("編集ボタンがタップされました")
         tableView.setEditing(!tableView.isEditing, animated: true)
-        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "キャンセル" : "編集"
-        navigationItem.leftBarButtonItem?.isHidden = !tableView.isEditing
+        editButton.title = tableView.isEditing ? "キャンセル" : "編集"
+        deleteButton.isHidden = !tableView.isEditing
         // 編集状態の際にボタンタップでチェック状態を初期化
         if tableView.isEditing {
             viewModel.cellViewModels.forEach {
@@ -104,6 +134,9 @@ final class MailListViewController: UIViewController {
     }
     @objc private func deleteButtonTapped() {
         viewModel.removeCheckedMail()
+    }
+    @objc private func filterButtonTapped() {
+        
     }
 }
     
