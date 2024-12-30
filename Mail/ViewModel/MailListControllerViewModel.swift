@@ -48,6 +48,10 @@ final class MailListControllerViewModel {
         let newItems = mails.map {
             MailListCellViewModel(mail: $0)
         }
+        // データ取得時に前のデータの編集状態に合わせて表示を変更
+        newItems.forEach {
+            $0.isEditing = cellViewModels.first?.isEditing ?? false
+        }
         cellViewModels.append(contentsOf: newItems)
         onDataUpdate?()
         isLoading = false

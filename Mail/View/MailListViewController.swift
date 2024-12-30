@@ -80,6 +80,11 @@ final class MailListViewController: UIViewController {
         print("編集ボタンがタップされました")
         tableView.setEditing(!tableView.isEditing, animated: true)
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "キャンセル" : "編集"
+        // 編集状態で現在表示しているセルに空のチェックマークを表示
+        viewModel.cellViewModels.forEach {
+            $0.isEditing = tableView.isEditing
+        }
+        tableView.reload()
     }
 }
     

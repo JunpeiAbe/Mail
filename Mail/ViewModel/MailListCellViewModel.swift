@@ -26,6 +26,8 @@ final class MailListCellViewModel {
     var isRead: Bool {
         mail.isRead
     }
+    /// 編集状態かどうか
+    var isEditing: Bool = false
     
     init(mail: Mail) {
         self.mail = mail

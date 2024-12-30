@@ -181,7 +181,7 @@ final class MailListCell: UITableViewCell {
     
     func configure() {
         guard let viewModel = viewModel else { return }
-        checkStateImage.isHidden = true
+        checkStateImage.isHidden = !viewModel.isEditing
         senderLabel.text = viewModel.sender
         subjectLabel.text = viewModel.subject
         bodyLabel.text = viewModel.body
