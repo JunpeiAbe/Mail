@@ -36,6 +36,12 @@ final class MailListViewController: UIViewController {
         viewModel.firstLoad()
         // pull to reflesh
         tableView.onRefresh = { [weak self] in
+            if let self,
+               self.tableView.isEditing {
+                // 編集状態の場合はリフレッシュせず、即時終了させる
+                tableView.endRefreshing()
+                return
+            }
             self?.viewModel.refresh()
         }
         // viewModelのデータ更新
@@ -81,6 +87,12 @@ final class MailListViewController: UIViewController {
         print("編集ボタンがタップされました")
         tableView.setEditing(!tableView.isEditing, animated: true)
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "キャンセル" : "編集"
+        // 編集状態の際にボタンタップでチェック状態を初期化
+        if tableView.isEditing {
+            viewModel.cellViewModels.forEach {
+                $0.isChecked = false
+            }
+        }
         // 編集状態で現在表示しているセルに空のチェックマークを表示
         viewModel.cellViewModels.forEach {
             $0.isEditing = tableView.isEditing
