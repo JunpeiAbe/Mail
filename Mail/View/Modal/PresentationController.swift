@@ -13,7 +13,6 @@ final class PresentationController: UIPresentationController {
             return
         }
         overlayView.frame = containerView.bounds
-        overlayView.gestureRecognizers = [UITapGestureRecognizer(target: self, action: #selector(overlayViewDidTouch))]
         overlayView.backgroundColor = .black
         overlayView.alpha = 0.0
         containerView.insertSubview(overlayView, at: 0)
@@ -23,8 +22,17 @@ final class PresentationController: UIPresentationController {
         }, completion:nil)
     }
     
-    // overlayViewをタップした時に呼ばれる
-    @objc func overlayViewDidTouch(_ sender: UITapGestureRecognizer) {
-        presentedViewController.dismiss(animated: true, completion: nil)
+    override func dismissalTransitionWillBegin() {
+        self.presentedViewController.transitionCoordinator?.animate(
+            alongsideTransition: { [weak self] _ in
+                self?.overlayView.alpha = 0
+            }
+        )
+    }
+    
+    override func dismissalTransitionDidEnd(_ completed: Bool) {
+        if completed {
+            self.overlayView.removeFromSuperview()
+        }
     }
 }

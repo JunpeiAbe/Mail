@@ -46,6 +46,7 @@ final class ModalViewController: UIViewController {
         view.addSubview(mainStackView)
         
         modalSheetView.anchor(height: contentView.frame.height)
+        modalSheetView.frame.size = CGSize(width: view.frame.width, height: contentView.frame.height)
         
         contentView.anchor(
             top: modalSheetView.topAnchor,
@@ -59,6 +60,28 @@ final class ModalViewController: UIViewController {
             bottom: view.bottomAnchor,
             right: view.trailingAnchor
         )
+        /// - note: 背景タップをモーダル部分以外の部分に適用する
+        // モーダルシート以外の領域をカバーする透明なビューを追加
+        let overlayView = UIView(frame: CGRect(
+            x: 0,
+            y: 0,
+            width: view.frame.width,
+            height: view.frame.height - modalSheetView.frame.height
+        ))
+        overlayView.backgroundColor = .clear // 完全透明
+        overlayView.isUserInteractionEnabled = true
+        
+        // タップジェスチャーを追加
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped(_:)))
+        overlayView.addGestureRecognizer(tapGesture)
+        
+        view.addSubview(overlayView) // 透明なビューを `view` の上に配置
+    }
+    
+    // overlayViewをタップした時に呼ばれる
+    @objc private func overlayTapped(_ sender: UITapGestureRecognizer) {
+        print("Overlay tapped")
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
