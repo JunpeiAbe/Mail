@@ -136,7 +136,11 @@ final class MailListViewController: UIViewController {
         viewModel.removeCheckedMail()
     }
     @objc private func filterButtonTapped() {
-        
+        let modalViewController = ModalViewController()
+        modalViewController.modalPresentationStyle = .custom
+        modalViewController.transitioningDelegate = self
+        modalViewController.contentView = UIView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 300))
+        present(modalViewController, animated: true)
     }
 }
     
@@ -190,6 +194,13 @@ extension MailListViewController: UITableViewDataSource {
     // セルの高さを指定
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
+    }
+}
+
+// MARK: UIViewControllerTransitioningDelegate
+extension MailListViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
 
