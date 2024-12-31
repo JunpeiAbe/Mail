@@ -77,7 +77,7 @@ final class CommonButton: UIButton {
 }
 
 
-#Preview("CommonButton-normal", traits: .sizeThatFitsLayout) {
+#Preview("CommonButton", traits: .sizeThatFitsLayout) {
     let button: CommonButton = {
         let button = CommonButton(
             title: "common",
