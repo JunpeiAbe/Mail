@@ -95,3 +95,23 @@ final class CommonButton: UIButton {
         .frame(height: 44)
         .padding()
 }
+
+#Preview("CancelButton", traits: .sizeThatFitsLayout) {
+    let cancelButton: CommonButton = {
+        let button: CommonButton = .init(
+            title: "Cancel",
+            titleColor: .black,
+            font: .systemFont(ofSize: 18, weight: .bold),
+            cornerRadius: 8,
+            borderWidth: 1,
+            borderColor: .black,
+            normalColor: .white,
+            highlightedColor: .white.withAlphaComponent(0.8)
+        )
+        return button
+    }()
+    
+    UIViewWrapper(view: cancelButton)
+        .frame(height: 44)
+        .padding()
+}
