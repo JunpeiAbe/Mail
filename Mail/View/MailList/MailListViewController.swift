@@ -49,6 +49,11 @@ final class MailListViewController: UIViewController {
         return item
     }()
     
+    let sortListModalContent: SortListModalContent = {
+        let content: SortListModalContent = .init()
+        return content
+    }()
+    
     let viewModel = MailListControllerViewModel()
 
     override func viewDidLoad() {
@@ -139,7 +144,7 @@ final class MailListViewController: UIViewController {
         let modalViewController = ModalViewController()
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
-        modalViewController.contentView = UIView(frame: .init(x: 0, y: 0, width: view.frame.width, height: 300))
+        modalViewController.contentView = sortListModalContent
         present(modalViewController, animated: true)
     }
 }
