@@ -26,8 +26,8 @@ final class ModalViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setupContentView()
     }
     
@@ -45,8 +45,7 @@ final class ModalViewController: UIViewController {
         )
         view.addSubview(mainStackView)
         
-        modalSheetView.anchor(height: contentView.frame.height)
-        modalSheetView.frame.size = CGSize(width: view.frame.width, height: contentView.frame.height)
+        modalSheetView.frame.size = CGSize(width: view.frame.width, height: view.frame.height / 2)
         
         contentView.anchor(
             top: modalSheetView.topAnchor,

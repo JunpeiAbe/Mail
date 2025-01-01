@@ -57,12 +57,18 @@ final class SortListModalContent: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layout()
         setup()
+        layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print("全体のサイズ",self.frame.size)
     }
     
     func setup() {
@@ -83,7 +89,8 @@ final class SortListModalContent: UIView {
         let mainStackView: UIStackView = .init(
             arrangedSubviews: [tableView,buttonsStackView],
             axis: .vertical,
-            spacing: 16
+            spacing: 16,
+            directionalLayoutMargins: .init(top: 16, leading: 16, bottom: 16, trailing: 16)
         )
         self.addSubview(mainStackView)
         
@@ -95,6 +102,7 @@ final class SortListModalContent: UIView {
         )
         cancelButton.anchor(height: 44)
         doneButton.anchor(height: 44)
+        tableView.anchor(height: CGFloat(cellViewModels.count) * 44)
     }
     
     @objc func cancelButtonTapped() {
@@ -150,7 +158,7 @@ extension SortListModalContent: UITableViewDataSource {
 
 #Preview(traits: .sizeThatFitsLayout) {
     let view: SortListModalContent = {
-        let view: SortListModalContent = .init(frame: .zero)
+        let view: SortListModalContent = .init()
         return view
     }()
     UIViewWrapper(view: view)
