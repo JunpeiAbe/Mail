@@ -4,7 +4,7 @@ import SwiftUI
 final class SortListModalContent: UIView {
     
     var cancelButtonAction: (() -> Void)?
-    var doneButtonAction: (() -> Void)?
+    var doneButtonAction: (([SortListCellViewModel]) -> Void)?
     
     // セルビューモデルのリスト(選択状態:isCheckedを保持)
     var cellViewModels: [SortListCellViewModel] = [
@@ -28,7 +28,7 @@ final class SortListModalContent: UIView {
     }()
     
     /// キャンセルボタン
-    let cancelButton: CommonButton = {
+    private lazy var cancelButton: CommonButton = {
         let button: CommonButton = .init(
             title: "Cancel",
             titleColor: .black,
@@ -39,11 +39,12 @@ final class SortListModalContent: UIView {
             normalColor: .white,
             highlightedColor: .white.withAlphaComponent(0.8)
         )
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
     
     /// 完了ボタン
-    let doneButton: CommonButton = {
+    private lazy var doneButton: CommonButton = {
         let button: CommonButton = .init(
             title: "OK",
             titleColor: .white,
@@ -52,6 +53,7 @@ final class SortListModalContent: UIView {
             normalColor: .systemBlue,
             highlightedColor: .systemBlue.withAlphaComponent(0.8)
         )
+        button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -65,10 +67,10 @@ final class SortListModalContent: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func layoutSubviews() {
         super.layoutSubviews()
-        print("全体のサイズ",self.frame.size)
+        // 数度表示された際に、最新の値を反映するためにreloadを行う
+        tableView.reloadData()
     }
     
     func setup() {
@@ -110,7 +112,9 @@ final class SortListModalContent: UIView {
     }
     
     @objc func doneButtonTapped() {
-        doneButtonAction?()
+        // 呼び出し元で最新値を取得するためにdoneタップ時に呼び出し元の画面に渡す
+        /// - note: 呼び出し元でコンテンツをインスタンス化しているので引数はなくても良い
+        doneButtonAction?(cellViewModels)
     }
 }
 

@@ -51,8 +51,11 @@ final class MailListViewController: UIViewController {
     
     let sortListModalContent: SortListModalContent = {
         let content: SortListModalContent = .init()
+        content.cellViewModels.first?.isChecked = true
         return content
     }()
+    /// 前回のソート選択項目
+    var lastSortKind: SortKind?
     
     let viewModel = MailListControllerViewModel()
 
@@ -87,6 +90,29 @@ final class MailListViewController: UIViewController {
             self?.tableView.reloadData()
             self?.tableView.finishRefresh()
             self?.loadingIndicator.stopAnimating()
+        }
+        // ソートモーダルのキャンセルボタンタップ時
+        sortListModalContent.cancelButtonAction = { [weak self] in
+            guard let self = self else { return }
+            // 前回の選択項目が空でない場合(doneタップして適用済みの場合)
+            // 遷移前の値に戻す
+            sortListModalContent.cellViewModels.forEach {
+                if $0.sortKind == self.lastSortKind {
+                    $0.isChecked = true
+                } else {
+                    $0.isChecked = false
+                }
+            }
+            // モーダルを閉じる
+            self.dismiss(animated: true)
+        }
+        // ソートモーダルのdoneボタンタップ時
+        sortListModalContent.doneButtonAction = { [weak self] cellViewModels in
+            guard let self = self else { return }
+            lastSortKind = cellViewModels.filter { $0.isChecked }.first?.sortKind
+            // モーダルを閉じる
+            self.dismiss(animated: true)
+            // - TODO: ソートを適用する
         }
     }
     
@@ -146,6 +172,8 @@ final class MailListViewController: UIViewController {
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
         modalViewController.contentView = sortListModalContent
+        // 遷移前のSortを保持
+        lastSortKind = sortListModalContent.cellViewModels.filter { $0.isChecked }.first?.sortKind
         present(modalViewController, animated: true)
     }
 }
