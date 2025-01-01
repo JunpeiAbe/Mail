@@ -77,7 +77,6 @@ final class SortListCell: UITableViewCell {
         return view
     }()
     UIViewWrapper(view: view)
-        .frame(width: .infinity,height: 44)
 }
 
 #Preview("Not Selected",traits: .sizeThatFitsLayout) {
@@ -90,5 +89,4 @@ final class SortListCell: UITableViewCell {
         return view
     }()
     UIViewWrapper(view: view)
-        .frame(width: .infinity,height: 44)
 }
