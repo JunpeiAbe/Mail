@@ -3,6 +3,17 @@ import SwiftUI
 @preconcurrency import WebKit
 
 //参考: https://qiita.com/ymp-a/items/951c55a1c0f1bc1607d4
+/// - note:エラーハンドリングとしては以下の方針で行う
+/*
+ 1. 通信エラーの処理
+ WKNavigationDelegate の
+ ・webView(_:didFail:withError:)
+ ・webView(_:didFailProvisionalNavigation:withError:) を実装。
+ didFailProvisionalNavigation: 初期リクエストの段階でエラーが発生した場合（例: ホストが見つからない、接続タイムアウト）。
+ didFail: ページ読み込み中にエラーが発生した場合（例: サーバーエラー、接続切断）。
+ 2. 不正なレスポンスの処理
+ webView(_:decidePolicyFor:decisionHandler:) を使用して、HTTP ステータスコードなどを確認し、不正なレスポンスをキャンセルします。
+ */
 final class WebViewController: UIViewController {
     
     /// webView
@@ -64,6 +75,18 @@ extension WebViewController: WKNavigationDelegate {
     /// - note:  webViewが元のURLリクエストに対する応答を受信した後、ナビゲーションリクエストを許可または拒否するには、このメソッドを使用
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
         print("レスポンス後")
+        if let httpResponse = navigationResponse.response as? HTTPURLResponse {
+            if !(200...299).contains(httpResponse.statusCode) {
+                print("不正なレスポンス: \(httpResponse.statusCode)")
+                UIAlertController
+                    .show(
+                        title: "レスポンスエラー",
+                        message: "レスポンスエラーが発生しました。\nステータスコード: \(httpResponse.statusCode)",
+                        presentingViewController: self
+                    )
+                return .cancel
+            }
+        }
         return .allow
     }
     /// リクエストのロード進行状況の追跡(タイミング：ページ読み込み開始前)🔍
@@ -93,11 +116,23 @@ extension WebViewController: WKNavigationDelegate {
     /// - note: ページ読み込み途中でのエラー発生時（HTML読み込み中のキャンセルなど）に呼び出し
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: any Error) {
         print("ページ読み込み途中でのエラー")
+        UIAlertController
+            .show(
+                title: "ページ読み込み途中エラー",
+                message: "ページの読み込みに失敗しました。\nエラー: \(error.localizedDescription)",
+                presentingViewController: self
+            )
     }
     /// エラー対応😭
     /// - note: ページ読み込み開始時でのエラー発生時（通信圏外など）に呼び出し
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError: Error) {
         print("ページ読み込み開始でのエラー")
+        UIAlertController
+            .show(
+                title: "ページ読み込み開始エラー",
+                message: "ページの読み込みに失敗しました。\nエラー: \(withError.localizedDescription)",
+                presentingViewController: self
+            )
     }
     
 }
