@@ -48,6 +48,22 @@ extension UIAlertController {
             presentingViewController: presentingViewController
         )
     }
+    
+    convenience init(
+        title: String?,
+        message: String?,
+        presentingViewController: UIViewController,
+        confirmTitle: String = "OK",
+        confirmAction: ((UIAlertAction) -> Void)? = nil,
+        cancelTitle: String = "Cancel",
+        cancelAction: ((UIAlertAction) -> Void)? = nil
+    ) {
+        let confirm = UIAlertAction(title: confirmTitle, style: .default, handler: confirmAction)
+        let cancel = UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelAction)
+        self.init(title: title, message: message, preferredStyle: .alert)
+        self.addAction(confirm)
+        self.addAction(cancel)
+    }
 }
 
 #Preview {
