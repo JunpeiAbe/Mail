@@ -14,11 +14,12 @@ final class CalenderPopupViewController: UIViewController {
         return view
     }()
     /// 日付選択ピッカー
-    private let calenderDatePicker: UIDatePicker = {
+    private lazy var calenderDatePicker: UIDatePicker = {
         let picker: UIDatePicker = .init()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .inline
         picker.locale = Locale(identifier: "ja_JP") // 日本のロケールを設定
+        picker.addTarget(self, action: #selector(calenderDateSelected), for: .valueChanged)
         return picker
     }()
     /// 時間選択ピッカー
@@ -62,6 +63,11 @@ final class CalenderPopupViewController: UIViewController {
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    // 最小日付(現在+10分後)
+    let minimumDate: Date = Calendar.current.date(byAdding: .minute, value: 10, to: .now) ?? .now
+    // 最大日付(現在+1日後)
+    lazy var maximumDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,15 +76,14 @@ final class CalenderPopupViewController: UIViewController {
     }
     
     func setup() {
-        // 最小日付
-        let minimumDate: Date = .now
-        // 最大日付(最小+10日後)
-        let maximumDate: Date = Calendar.current.date(byAdding: .day, value: 10, to: minimumDate) ?? minimumDate
         print("最小日付:",minimumDate.toString(format: .yyyyMMddHHmmss_slash_colon))
         print("最大日付:",maximumDate.toString(format: .yyyyMMddHHmmss_slash_colon))
         // UIDatePicker に最小・最大日付を設定
         calenderDatePicker.minimumDate = minimumDate
         calenderDatePicker.maximumDate = maximumDate
+        timeDatePicker.minimumDate = minimumDate
+        timeDatePicker.maximumDate = maximumDate
+        timeDatePicker.date = minimumDate // 初期値を最小値
         calenderDatePicker.date = minimumDate // 初期値を最小値
     }
     
@@ -125,6 +130,12 @@ final class CalenderPopupViewController: UIViewController {
             bottom: view.bottomAnchor,
             right: view.trailingAnchor
         )
+    }
+    
+    @objc func calenderDateSelected() {
+        let selectedDate = calenderDatePicker.date
+        print("選択された日付: \(selectedDate)")
+        timeDatePicker.date = selectedDate // カレンダーの選択日付で更新
     }
     
     @objc func cancelButtonTapped() {
