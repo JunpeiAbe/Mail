@@ -35,9 +35,9 @@ extension UICollectionView {
     }
     
     /// セルの再利用
-    func dequeueReusableCell<T: UICollectionViewCell>(for indexPath: IndexPath) -> T {
+    func dequeueReusableCell<T: UICollectionViewCell>(_ cellType: T.Type, for indexPath: IndexPath) -> T {
         guard let cell = self.dequeueReusableCell(
-            withReuseIdentifier: String(describing: T.self),
+            withReuseIdentifier: String(describing: cellType.self),
             for: indexPath
         ) as? T else {
             fatalError("Failed to dequeue cell with identifier: \(String(describing: T.self))")

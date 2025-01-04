@@ -52,7 +52,11 @@ final class IconCollectionCell: UICollectionViewCell {
         contentView.backgroundColor = .white
         contentView.addSubview(mainStackView)
         
-        iconImage.anchor(width: 60, height: 60)
+        iconImage.setContentHuggingPriority(.defaultLow, for: .vertical)
+        iconImage.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        
         mainStackView.anchor(
             top: contentView.topAnchor,
             left: contentView.leadingAnchor,

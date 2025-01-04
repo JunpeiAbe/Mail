@@ -4,7 +4,8 @@ import SwiftUI
 final class IconCollectionView: UICollectionView {
     
     init() {
-        super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout: UICollectionViewFlowLayout = .init()
+        super.init(frame: .zero, collectionViewLayout: layout)
         setup()
     }
     
@@ -14,12 +15,7 @@ final class IconCollectionView: UICollectionView {
     
     private func setup() {
         // セルの登録
-        
-        // リフレッシュコントロールの登録
-        
+        self.registerCell(IconCollectionCell.self)
         // レイアウトの設定
-        
     }
-    
-    
 }
