@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 /// アイコン画像リスト表示画面
+/// - note: セル同士の間隔やセルサイズはUICollectionViewFlowLayoutまたはUICollectionViewDelegateFlowLayoutのメソッドで指定する
 final class IconListViewController: UIViewController {
     // 表示用アイテム
     struct Item {
