@@ -1,6 +1,7 @@
 import UIKit
 import SwiftUI
 /// 汎用ボタンクラス
+/// - note: Configurationを使用していない(デフォルトがPlainボタン)
 final class CommonButton: UIButton {
     /// 通常背景色
     var normalColor: UIColor?
