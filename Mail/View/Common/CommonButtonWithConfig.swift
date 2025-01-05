@@ -20,7 +20,10 @@ final class CommonButtonWithConfig: UIButton {
         shadowRadius: CGFloat = 8,
         normalColor: UIColor? = nil,
         highlightedColor: UIColor? = nil,
-        disabledColor: UIColor? = nil
+        disabledColor: UIColor? = nil,
+        image: UIImage? = nil,
+        imagePlacement: NSDirectionalRectEdge = .leading,
+        imagePadding: CGFloat = 0
     ) {
         super.init(frame: .zero)
 
@@ -43,6 +46,11 @@ final class CommonButtonWithConfig: UIButton {
         backgroundConfig.strokeWidth = borderWidth
         backgroundConfig.cornerRadius = cornerRadius
         config.background = backgroundConfig
+        // 画像の設定
+        config.image = image
+        // 画像の位置を設定
+        config.imagePlacement = imagePlacement // 位置
+        config.imagePadding = imagePadding // 余白
         
         self.configuration = config
 
@@ -53,14 +61,18 @@ final class CommonButtonWithConfig: UIButton {
                 if let highlightedColor {
                     // ハイライト指定した場合、指定色+背景を暗くする(デフォルト)
                     button.configuration?.baseBackgroundColor = highlightedColor
+                    button.configuration?.image = image?.withTintColor(highlightedColor, renderingMode: .alwaysTemplate)
                 } else {
                     // ハイライト未指定の場合、通常色を基準に指定割合で暗くする
                     button.configuration?.baseBackgroundColor = normalColor?.darker(by: 50)
+                    button.configuration?.image = image?.withTintColor(normalColor?.darker(by: 50) ?? .black, renderingMode: .alwaysTemplate)
                 }
             case .disabled:
                 button.configuration?.baseBackgroundColor = disabledColor ?? normalColor
+                button.configuration?.image = image?.withTintColor(disabledColor ?? .black, renderingMode: .alwaysTemplate)
             default:
                 button.configuration?.baseBackgroundColor = normalColor
+                button.configuration?.image = image // デフォルトの画像色を適用するため、そのまま画像を指定
             }
         }
 
@@ -100,18 +112,20 @@ extension UIColor {
         let button = CommonButtonWithConfig(
             title: "Common",
             titleColor: .white,
-            font: .systemFont(ofSize: 16, weight: .bold),
+            font: .systemFont(ofSize: 12, weight: .bold),
             cornerRadius: 16,
-            cornerStyle: .capsule,
-            normalColor: .red,
-            disabledColor: .systemGray
+            normalColor: .black,
+            disabledColor: .systemGray,
+            image: .add,
+            imagePlacement: .bottom,
+            imagePadding: 8
         )
         button.isEnabled = true // 活性化
         return button
     }()
     
     UIViewWrapper(view: button)
-        .frame(height: 44)
+        .frame(width: 80, height: 80)
         .padding()
 }
 
