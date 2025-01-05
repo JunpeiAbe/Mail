@@ -36,6 +36,19 @@ extension UIView {
             self.heightAnchor.constraint(equalToConstant: height).isActive = true
         }
     }
+    /// 上記のみだとScrollViewのframelayoutGuideとコンテンツに制約をつけられないため以下で付加する
+    func sizeAnchor(
+        width: NSLayoutDimension? = nil,
+        height: NSLayoutDimension? = nil
+    ) {
+        if let width = width {
+            self.widthAnchor.constraint(equalTo: width).isActive = true
+        }
+        if let height = height {
+            self.heightAnchor.constraint(equalTo: height).isActive = true
+        }
+    }
+    
     /// 指定したビューに対して中央に配置する制約を設定する
     func centerInSuperview(offsetX: CGFloat = 0, offsetY: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil) {
         guard let superview = self.superview else {
