@@ -53,6 +53,9 @@ extension UILabel {
         /// lineSpacing = 想定する行間 - (lineHeight - fontSize)より算出
         let lineSpacing = spacing - (self.font.lineHeight - self.font.pointSize)
         paragraphStyle.lineSpacing = lineSpacing
+        // 現在のlineBreakModeをparagraphStyleに適用
+        ///  - note: defaultがbyWordWrappingなのでinitで設定した改行形式が上書きされてしまうため
+        paragraphStyle.lineBreakMode = self.lineBreakMode
         
         let attributedString = NSMutableAttributedString(string: text)
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
@@ -107,7 +110,7 @@ extension UILabel {
     )
     
     UIViewWrapper(view: mainStackView)
-        .frame(width: 300, height: .infinity)
+        .frame(width: .infinity, height: .infinity)
 }
 
 
