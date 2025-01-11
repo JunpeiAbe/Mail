@@ -41,6 +41,9 @@ final class CommonTextField: UITextField {
         self.textPadding = textPadding
         self.clearButtonMode = clearButtonMode
         self.validator = validator
+        self.normalBorderColor = normalBorderColor
+        self.highlightBorderColor = highlightBorderColor
+        self.errorBorderColor = errorBorderColor
         self.translatesAutoresizingMaskIntoConstraints = false
         self.delegate = self
     }
@@ -65,7 +68,6 @@ final class CommonTextField: UITextField {
             // 通常
             self.layer.borderColor = normalBorderColor.cgColor
         }
-        self.setNeedsDisplay() // 再描画を強制
     }
     // プレースホルダーやテキストの表示領域を調整
     override func textRect(forBounds bounds: CGRect) -> CGRect {
