@@ -3,6 +3,8 @@ import UIKit
 protocol InputValidatable {
     /// 入力許可文字種
     var allowedRegex: AllowedCharacterRegex { get set }
+    /// エラーメッセージ
+    var errorMessage: String { get set }
     /// 入力終了時のバリデーション
     func validate(text: String?) -> Bool
     /// 入力テキストをフィルタリングして許可された文字列のみを返す

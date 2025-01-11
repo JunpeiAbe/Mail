@@ -28,7 +28,7 @@ final class CommonTextField: UITextField {
         borderWidth: CGFloat = 1.5,
         cornerRadius: CGFloat = 8.0,
         textPadding: UIEdgeInsets = .init(top: 0, left: 16, bottom: 0, right: 16),
-        clearButtonMode: UITextField.ViewMode = .unlessEditing,
+        clearButtonMode: UITextField.ViewMode = .never,
         validator: InputValidatable
     ) {
         super.init(frame: .zero)
@@ -122,9 +122,12 @@ extension CommonTextField: UITextFieldDelegate {
         guard let textField = textField as? CommonTextField else { return }
         let isValid = textField.validator?.validate(text: textField.text) ?? true
         if isValid {
+            /// エラーメッセージを初期化
             errorMessage = .init()
             onValidationSuccess?()
         } else {
+            /// バリデーターのエラーメッセージを反映
+            errorMessage = textField.validator?.errorMessage ?? ""
             onValidationFailure?()
         }
         textField.updateBorder()
@@ -134,6 +137,7 @@ extension CommonTextField: UITextFieldDelegate {
 #Preview("CommonTextField", traits: .sizeThatFitsLayout) {
     let field: CommonTextField = {
         class Validotor: InputValidatable {
+            var errorMessage: String = ""
             var allowedRegex: AllowedCharacterRegex = .halfWidthAlphanumeric
         }
         let field = CommonTextField(
