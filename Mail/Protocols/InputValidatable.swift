@@ -3,6 +3,8 @@ import UIKit
 protocol InputValidatable {
     /// 入力許可文字種
     var allowedRegex: AllowedCharacterRegex { get set }
+    /// 入力最大文字数
+    var maxCharacterCount: Int? { get set }
     /// エラーメッセージ
     var errorMessage: String { get set }
     /// 入力終了時のバリデーション

@@ -1,6 +1,8 @@
 import UIKit
 /// 認証コードのバリデーションクラス
 final class AuthCodeValidator: InputValidatable {
+    var maxCharacterCount: Int? = 4
+    
     var errorMessage: String = .init()
     /// 半角数字のみ入力可
     var allowedRegex: AllowedCharacterRegex = .halfWidthNumbers

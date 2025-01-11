@@ -102,10 +102,10 @@ extension CommonTextField: UITextFieldDelegate {
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
         // 許可された文字列のみを抽出
         let filteredText = validator.filteredText(from: updatedText)
-        
-        // フィルタリング後の文字列が現在のテキストと異なる場合、更新
-        if filteredText != updatedText {
-            textField.text = filteredText
+        // 最大文字数指定があり超過する場合(コピペ対応)
+        if let max = validator.maxCharacterCount,
+           filteredText.count > max {
+            textField.text = String(filteredText.prefix(max))
             return false // テキストを直接更新したため、return false
         }
         return true
@@ -139,6 +139,7 @@ extension CommonTextField: UITextFieldDelegate {
 #Preview("CommonTextField", traits: .sizeThatFitsLayout) {
     let field: CommonTextField = {
         class Validotor: InputValidatable {
+            var maxCharacterCount: Int?
             var errorMessage: String = ""
             var allowedRegex: AllowedCharacterRegex = .halfWidthAlphanumeric
         }
