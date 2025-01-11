@@ -2,6 +2,8 @@ import UIKit
 import SwiftUI
 /// 認証コード入力画面
 final class AuthCodeViewController: UIViewController {
+    /// ビューモデル
+    private let viewModel = AuthCodeViewControllerViewModel()
     /// 認証コード入力欄
     let authCodeTextField: CommonTextField = {
         let textField: CommonTextField = .init(
@@ -46,11 +48,19 @@ final class AuthCodeViewController: UIViewController {
         setupTapGestureToDismissKeyboard()
         authCodeTextField.onValidationSuccess = { [weak self] in
             guard let self = self else { return }
+            self.viewModel.authCodeFieldErrorMessage = authCodeTextField.errorMessage
+            self.viewModel.authCodeText = authCodeTextField.text
             self.authCodeTextFieldErrorLabel.text = authCodeTextField.errorMessage
         }
         authCodeTextField.onValidationFailure = { [weak self] in
             guard let self = self else { return }
+            self.viewModel.authCodeFieldErrorMessage = authCodeTextField.errorMessage
+            self.viewModel.authCodeText = authCodeTextField.text
             self.authCodeTextFieldErrorLabel.text = authCodeTextField.errorMessage
+        }
+        viewModel.onButtonStateChanged = { [weak self] isEnabled in
+            print(isEnabled)
+            self?.authCodeSendButton.isEnabled = isEnabled
         }
     }
     
