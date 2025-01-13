@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 68370BE22D2D3E7600E9C88D /* RxSwift */; };
+		68E8BF932D354AC100DD6BD7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 68E8BF922D354AC100DD6BD7 /* RxCocoa */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68E8BF932D354AC100DD6BD7 /* RxCocoa in Frameworks */,
 				68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,10 +49,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		68E8BF912D354AC100DD6BD7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		68F69CDA2D0705CC009609FD = {
 			isa = PBXGroup;
 			children = (
 				68F69CE52D0705CC009609FD /* Mail */,
+				68E8BF912D354AC100DD6BD7 /* Frameworks */,
 				68F69CE42D0705CC009609FD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,6 +94,7 @@
 			name = Mail;
 			packageProductDependencies = (
 				68370BE22D2D3E7600E9C88D /* RxSwift */,
+				68E8BF922D354AC100DD6BD7 /* RxCocoa */,
 			);
 			productName = Mail;
 			productReference = 68F69CE32D0705CC009609FD /* Mail.app */;
@@ -369,6 +380,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		68E8BF922D354AC100DD6BD7 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
