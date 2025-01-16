@@ -2,11 +2,11 @@ import UIKit
 import SwiftUI
 import RxSwift
 
-final class RxExampleViewController: UIViewController {
+final class RxCounterViewController: UIViewController {
     /// DisposeBag (RxSwiftのリソース管理用)
     private let disposeBag = DisposeBag()
     
-    private var viewModel: RxExampleViewModel = .init()
+    private var viewModel: RxCounterViewModel = .init()
     
     private let countLabel: UILabel = {
         let label: UILabel = .init(
@@ -94,8 +94,8 @@ final class RxExampleViewController: UIViewController {
 }
 
 #Preview {
-    let viewController: RxExampleViewController = {
-        let vc: RxExampleViewController = .init()
+    let viewController: RxCounterViewController = {
+        let vc: RxCounterViewController = .init()
         return vc
     }()
     UIViewControllerWrapper(viewController: viewController)

@@ -17,7 +17,7 @@ protocol CounterViewModelType {
     func setup(input: CounterViewModelInput)
 }
 
-final class RxExampleViewModel: CounterViewModelType {
+final class RxCounterViewModel: CounterViewModelType {
     var output: CounterViewModelOutput?
     
     private let countRelay = BehaviorRelay<Int>(value: 0)
@@ -62,7 +62,7 @@ final class RxExampleViewModel: CounterViewModelType {
     }
 }
 
-extension RxExampleViewModel: CounterViewModelOutput {
+extension RxCounterViewModel: CounterViewModelOutput {
     var counterText: RxCocoa.Driver<String?> {
         return countRelay
             .map { "Rx パターン:\($0)"}
