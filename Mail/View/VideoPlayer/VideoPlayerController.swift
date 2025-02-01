@@ -1,7 +1,7 @@
 import UIKit
 import SwiftUI
 
-final class VideoPlayerViewController: UIViewController {
+final class VideoPlayerController: UIViewController {
     private let videoPlayerView: VideoPlayerView = .init()
     private var originalVideoSuperView: UIView?
     private var originalVideoPlayerViewHeight: CGFloat?
@@ -67,8 +67,8 @@ final class VideoPlayerViewController: UIViewController {
 }
 
 #Preview {
-    let viewController: VideoPlayerViewController = {
-        let vc: VideoPlayerViewController = .init()
+    let viewController: VideoPlayerController = {
+        let vc: VideoPlayerController = .init()
         return vc
     }()
     UIViewControllerWrapper(viewController: viewController)
