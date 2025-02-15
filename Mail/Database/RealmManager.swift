@@ -27,6 +27,40 @@ final class RealmManager {
             Logger.shared.logLevel(.debug, message: "データの保存に失敗しました:\(error)")
         }
     }
+    /// データを追加・更新(主キーがある場合は更新される): 非同期
+    /// ◻️writeAsync で Cannot schedule async transaction. Make sure you are running from inside a run loop. エラーの原因と解決方法
+    /// - note: writeAsyncはRunloopが必要、Runloopがないと動作エラーになる。→Cannot schedule async transaction. Make sure you are running from inside a run loop.
+    /// DispatchQueue.global(qos: .background).async には RunLoop がない
+    /// DispatchQueue.global() は デフォルトでは RunLoop を持たないバックグラウンドスレッド で実行される。そのため、ここで writeAsync を実行するとエラーが発生する
+    /// メインスレッドで実行する(Dispatch.main.asyncではRunloopがある)
+    /// Dispatch.main.asyncまたは@MainActorの付与
+    /// - note: Runloopはスレッドがアイドル状態にならず、定期的にタスクを処理し続ける仕組み のこと
+    func saveWithWriteAsync<T: Object>(_ object: T, completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.main.async {
+            print("saveWithWriteAsyncのスレッド:\(Thread.current)")
+            do {
+                let realm = try Realm() // ✅ バックグラウンドスレッドで Realm インスタンスを作成
+                
+                realm.writeAsync {
+                    print("🔄 `writeAsync` 内部の処理が実行されるスレッド: \(Thread.current)")
+                    realm.add(object, update: .modified) // ✅ 非同期でデータを追加
+                } onComplete: { error in
+                    
+                        if let error = error {
+                            print("エラー発生: \(error)")
+                            completion(.failure(error)) // ❌ エラー発生時に通知
+                        } else {
+                            print("✅ 保存完了！")
+                            print("saveWithWriteAsync完了後のスレッド:\(Thread.current)")
+                            completion(.success(())) // ✅ 成功時に通知
+                        }
+                }
+            } catch {
+                print("エラー発生: \(error)")
+                completion(.failure(error)) // ❌ Realm のインスタンス作成失敗時に通知
+            }
+        }
+    }
     
     /// データを追加・更新(主キーがある場合は更新される): 非同期(既存の同期処理を非同期的に扱うメソッドを使用)
     /// - note: 非同期処理→バックグラウンドで書き込み処理を実行し完了後に次の処理が実行される、メインスレッドをブロックしない(大量のデータ処理に向いている)

@@ -15,7 +15,7 @@ final class RealmViewController: UIViewController {
         button.addTarget(self, action: #selector(saveSync) , for: .touchUpInside)
         return button
     }()
-    /// 保存(同期)ボタン
+    /// 保存(非同期)ボタン
     private lazy var saveAsyncButton: CommonButtonWithConfig = {
         let button: CommonButtonWithConfig = .init(
             title: "保存(非同期)",
@@ -24,7 +24,7 @@ final class RealmViewController: UIViewController {
             cornerRadius: 8,
             normalColor: .blue
         )
-        button.addTarget(self, action: #selector(saveAsync) , for: .touchUpInside)
+        button.addTarget(self, action: #selector(saveWithWriteAsync) , for: .touchUpInside)
         return button
     }()
     /// 削除ボタン
@@ -126,7 +126,7 @@ final class RealmViewController: UIViewController {
     
     let realmManager: RealmManager = .init()
     
-    /// 保存
+    /// 保存(同期)
     @objc func saveSync() {
         let user: User = .init()
         user.id = UUID().uuidString
@@ -136,7 +136,27 @@ final class RealmViewController: UIViewController {
         realmManager.saveSync(user)
         Logger.shared.logLevel(.debug, message: "保存処理")
     }
-    /// 保存
+    /// 保存(非同期)
+    @objc func saveWithWriteAsync() {
+        let user: User = .init()
+        user.id = UUID().uuidString
+        user.name = "ユーザー\(Int.random(in: 1..<100))"
+        user.age = Int.random(in: 1..<100)
+        userList.append(user)
+        realmManager.saveWithWriteAsync(user) { result in
+            switch result {
+            case .success(_):
+                if let users = self.realmManager.fetchAll(User.self) {
+                    let safeUsers = Array(users).map { UserStruct(id: $0.id, name: $0.name, age: $0.age) }
+                    print("saveWithWriteAsync(viewController)のスレッド:\(Thread.current)")
+                    print("取得データ:", safeUsers)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    /// 保存(非同期)
     @objc func saveAsync() {
         let user: User = .init()
         user.id = UUID().uuidString
