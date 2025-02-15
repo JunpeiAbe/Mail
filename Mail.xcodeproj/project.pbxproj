@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 68370BE22D2D3E7600E9C88D /* RxSwift */; };
+		68DEBB5A2D5F642A007981FB /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 68DEBB592D5F642A007981FB /* RealmSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68DEBB5A2D5F642A007981FB /* RealmSwift in Frameworks */,
 				68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +86,7 @@
 			name = Mail;
 			packageProductDependencies = (
 				68370BE22D2D3E7600E9C88D /* RxSwift */,
+				68DEBB592D5F642A007981FB /* RealmSwift */,
 			);
 			productName = Mail;
 			productReference = 68F69CE32D0705CC009609FD /* Mail.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */,
+				68DEBB582D5F642A007981FB /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68F69CE42D0705CC009609FD /* Products */;
@@ -362,6 +366,14 @@
 				minimumVersion = 6.8.0;
 			};
 		};
+		68DEBB582D5F642A007981FB /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -369,6 +381,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		68DEBB592D5F642A007981FB /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68DEBB582D5F642A007981FB /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
