@@ -3,17 +3,6 @@ import UIKit
 
 final class RealmManager {
     
-//    private let realm: Realm
-//    
-//    /// 初期化
-//    init() {
-//        do {
-//            print("Realmインスタンスがメインスレッドで作成されたかどうか:\(Thread.isMainThread)")
-//            self.realm = try Realm()
-//        } catch {
-//            fatalError("Realmの初期化に失敗: \(error)")
-//        }
-//    }
     /// データを追加・更新(主キーがある場合は更新される): 同期
     /// - note: 即時実行→writeの中の処理はブロックされ完了まで待つ、スレッドをブロック→メインスレッドで実行するとUIフリーズ可能性がある(小規模な書き込みに向いている)
     func saveSync<T: Object>(_ object: T) {
@@ -74,7 +63,7 @@ final class RealmManager {
     /// @MainActorを付与しないと呼び出し元(Task)がメインスレッドでもバックグラウンドスレッドでインスタンス化される
     ///  writeAsyncは別の異なるバックグラウンドスレッドとなるためincorrect thread errorになる
     @MainActor
-    func saveAsync<T: Object>(_ object: T) async {
+    func saveAsyncWithCheckedContinuation<T: Object>(_ object: T) async {
         do {
             // メインスレッドで作成される
             let realm = try await Realm()
@@ -96,6 +85,36 @@ final class RealmManager {
             
         }
     }
+    
+    /// データを追加・更新(主キーがある場合は更新される): 非同期
+    @MainActor
+    func saveAsync<T: Object>(_ object: T) async {
+        // メインスレッドで作成される
+        do {
+            let realm = try await Realm()
+            try await realm.asyncWrite {
+                realm.add(object, update: .modified)
+                print("データ保存")
+            }
+        } catch {
+            print("エラー発生: \(error)")
+        }
+    }
+    
+    /// リストを追加更新(主キーがある場合は更新される): 非同期
+    /// - note: withTaskGroup(of:)に戻り値の型を指定すると、groupに指定の型が追加され、後続の処理で用いることができる
+    @MainActor
+    func saveAsyncList<T: Object>(_ objects: [T]) async {
+        await withTaskGroup(of: Void.self) { group in
+            for object in objects {
+                group.addTask {
+                    await self.saveAsync(object)
+                }
+            }
+        }
+        print("全ての保存が完了しました")
+    }
+    
     /// データを一括追加・更新
     func saveSync<T: Object>(_ objects: [T]) {
         do {

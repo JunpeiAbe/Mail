@@ -16,7 +16,7 @@ final class RealmViewController: UIViewController {
         return button
     }()
     /// 保存(非同期)ボタン
-    private lazy var saveAsyncButton: CommonButtonWithConfig = {
+    private lazy var saveWriteAsyncButton: CommonButtonWithConfig = {
         let button: CommonButtonWithConfig = .init(
             title: "保存(非同期)",
             titleColor: .white,
@@ -25,6 +25,18 @@ final class RealmViewController: UIViewController {
             normalColor: .blue
         )
         button.addTarget(self, action: #selector(saveWithWriteAsync) , for: .touchUpInside)
+        return button
+    }()
+    /// リスト保存(非同期)ボタン
+    private lazy var saveListAsyncWriteButton: CommonButtonWithConfig = {
+        let button: CommonButtonWithConfig = .init(
+            title: "リスト保存(非同期)",
+            titleColor: .white,
+            font: .systemFont(ofSize: 18, weight: .bold),
+            cornerRadius: 8,
+            normalColor: .magenta
+        )
+        button.addTarget(self, action: #selector(saveListAsyncWrite) , for: .touchUpInside)
         return button
     }()
     /// 削除ボタン
@@ -75,6 +87,18 @@ final class RealmViewController: UIViewController {
         button.addTarget(self, action: #selector(fetchAllSafely) , for: .touchUpInside)
         return button
     }()
+    // 保存+取得ボタン
+    private lazy var saveAndFetchButton: CommonButtonWithConfig = {
+        let button: CommonButtonWithConfig = .init(
+            title: "保存+取得ボタン",
+            titleColor: .white,
+            font: .systemFont(ofSize: 18, weight: .bold),
+            cornerRadius: 8,
+            normalColor: .black
+        )
+        button.addTarget(self, action: #selector(saveAndFetch) , for: .touchUpInside)
+        return button
+    }()
     /// 内部保持データ
     var userList: [User] = []
     
@@ -93,11 +117,13 @@ final class RealmViewController: UIViewController {
         let mainStackView: UIStackView = .init(
             arrangedSubviews: [
                 saveSyncButton,
-                saveAsyncButton,
+                saveWriteAsyncButton,
+                saveListAsyncWriteButton,
                 removeButton,
                 fetchAllButton,
                 fetchAllwithErrorButton,
-                fetchAllSatisfyButton
+                fetchAllSatisfyButton,
+                saveAndFetchButton
             ],
             axis: .vertical,
             spacing: 16,
@@ -117,11 +143,13 @@ final class RealmViewController: UIViewController {
                 right: view.trailingAnchor
             )
         saveSyncButton.anchor(height: 48)
-        saveAsyncButton.anchor(height: 48)
+        saveWriteAsyncButton.anchor(height: 48)
+        saveListAsyncWriteButton.anchor(height: 48)
         removeButton.anchor(height: 48)
         fetchAllButton.anchor(height: 48)
         fetchAllwithErrorButton.anchor(height: 48)
         fetchAllSatisfyButton.anchor(height: 48)
+        saveAndFetchButton.anchor(height: 48)
     }
     
     let realmManager: RealmManager = .init()
@@ -164,7 +192,23 @@ final class RealmViewController: UIViewController {
         user.age = Int.random(in: 1..<100)
         userList.append(user)
         Task {
-            await realmManager.saveAsync(user)
+            await realmManager.saveAsyncWithCheckedContinuation(user)
+            print("保存処理(非同期)")
+        }
+    }
+    /// リストの保存(非同期)
+    @objc func saveListAsyncWrite() {
+        Task {
+        var users: [User] = []
+        for _ in 0..<20 {
+            let user: User = .init()
+            user.id = UUID().uuidString
+            user.name = "ユーザー\(Int.random(in: 1..<100))"
+            user.age = Int.random(in: 1..<100)
+            userList.append(user)
+            users.append(user)
+        }
+            await realmManager.saveAsyncList(users)
             print("保存処理(非同期)")
         }
     }
@@ -178,14 +222,7 @@ final class RealmViewController: UIViewController {
     }
     /// 全取得
     @objc func fetchAll() {
-        userList = []
-        if let users = realmManager.fetchAll(User.self) {
-            users.forEach {
-                userList.append($0)
-            }
-            print("取得データ:",users)
-            print("保持データ件数:",userList.count)
-        }
+        fetchAllinMainThread {}
     }
     /// 全取得(incorrect thread: realm作成スレッドと実行スレッドが異なるためエラー発生)
     /// - note: バックグラウンドスレッドで取得したRealmオブジェクトをメインスレッドで使うような処理
@@ -213,6 +250,46 @@ final class RealmViewController: UIViewController {
                     print("取得データ:", safeUsers)
                     print("保持データ件数:", self.userList.count)
                 }
+            }
+        }
+    }
+    /// 保存+取得
+    @objc func saveAndFetch() {
+        fetchAllinMainThread {
+            print("fetchAllinMainThread complete")
+            self.save {
+                print("save complete")
+                self.fetchAllinMainThread {
+                    print("fetchAllinMainThread complete")
+                }
+            }
+        }
+    }
+    
+    func save(completion: @escaping () -> Void) {
+        DispatchQueue.global().async {
+            print("データ保存処理(同期)の実行スレッド:\(Thread.current)")
+            let user: User = .init()
+            user.id = UUID().uuidString
+            user.name = "ユーザー\(Int.random(in: 1..<100))"
+            user.age = Int.random(in: 1..<100)
+            self.userList.append(user)
+            self.realmManager.saveSync(user)
+            completion()
+        }
+    }
+    
+    func fetchAllinMainThread(completion: @escaping () -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            print("データ取得処理の実行スレッド:\(Thread.current)")
+            self?.userList = []
+            if let users = self?.realmManager.fetchAll(User.self) {
+                users.forEach {
+                    self?.userList.append($0)
+                }
+                print("取得データ:",users)
+                print("保持データ件数:",self?.userList.count ?? 0)
+                completion()
             }
         }
     }
