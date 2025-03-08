@@ -7,7 +7,7 @@ import SwiftUI
 final class CommonButtonWithConfig: UIButton {
     /// カスタムイニシャライザ
     init(
-        title: String,
+        title: String? = nil,
         titleColor: UIColor = .white,
         font: UIFont = .systemFont(ofSize: 16),
         cornerRadius: CGFloat = 0,
@@ -39,7 +39,9 @@ final class CommonButtonWithConfig: UIButton {
         let container = AttributeContainer([
             .font: font
         ])
-        config.attributedTitle = AttributedString(title, attributes: container)
+        if let title {
+            config.attributedTitle = AttributedString(title, attributes: container)
+        }
         // ボーダーや線の太さはUIBackgroundConfigurationから設定する
         var backgroundConfig = UIBackgroundConfiguration.clear()
         backgroundConfig.strokeColor = borderColor
@@ -72,7 +74,11 @@ final class CommonButtonWithConfig: UIButton {
                 button.configuration?.image = image?.withTintColor(disabledColor ?? .black, renderingMode: .alwaysTemplate)
             default:
                 button.configuration?.baseBackgroundColor = normalColor
-                button.configuration?.image = image // デフォルトの画像色を適用するため、そのまま画像を指定
+                // デフォルトの画像色を適用するため、そのまま画像を指定
+                // 現在のconfigurationの画像を参照する(タップ時の画像変更が反映されないため)
+                if let customImage = button.configuration?.image {
+                    button.configuration?.image = customImage
+                }
             }
         }
 
@@ -85,6 +91,16 @@ final class CommonButtonWithConfig: UIButton {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension CommonButtonWithConfig {
+    /// ボタン画像を更新するメソッド
+    func updateImage(image: UIImage?) {
+        guard let config = self.configuration else { return }
+        var updatedConfig = config
+        updatedConfig.image = image
+        self.configuration = updatedConfig
     }
 }
 
@@ -140,6 +156,23 @@ extension UIColor {
             borderColor: .black,
             normalColor: .white,
             highlightedColor: .white
+        )
+        button.isEnabled = true // 活性化
+        return button
+    }()
+    
+    return UIViewWrapper(view: cancelButton)
+        .frame(height: 44)
+        .padding()
+}
+
+#Preview("ImageOnlyButton", traits: .sizeThatFitsLayout) {
+    let cancelButton: CommonButtonWithConfig = {
+        let button = CommonButtonWithConfig(
+            titleColor: .systemGray4,
+            shadowColor: .clear,
+            normalColor: UIColor.clear,
+            image: UIImage(systemName: "play.fill")
         )
         button.isEnabled = true // 活性化
         return button
