@@ -83,20 +83,20 @@ final class RxAuthViewController: UIViewController {
 //            })
 //            .disposed(by: disposeBag)
         
-        Observable
-            .combineLatest(
-                emailTextField,rx.text.map { $0 ?? "" },
-                passwordTextField.rx.text.map { $0 ?? "" },
-                passwordConfirmTextField.rx.text.map { $0 ?? "" }
-            )
-            .map { email, pass1, pass2 in
-                email.isValidEmail
-                && pass1.isValidPassword
-                && pass2.isValidPassword
-                && pass1 == pass2
-            }
-            .bind(to: signupButton.rx.isEnabled) // mapで変換したBoolから判定
-            .disposed(by: disposeBag)
+//        Observable
+//            .combineLatest(
+//                emailTextField,rx.text.map { $0 ?? "" },
+//                passwordTextField.rx.text.map { $0 ?? "" },
+//                passwordConfirmTextField.rx.text.map { $0 ?? "" }
+//            )
+//            .map { email, pass1, pass2 in
+//                email.isValidEmail
+//                && pass1.isValidPassword
+//                && pass2.isValidPassword
+//                && pass1 == pass2
+//            }
+//            .bind(to: signupButton.rx.isEnabled) // mapで変換したBoolから判定
+//            .disposed(by: disposeBag)
     }
     
     func layout() {
