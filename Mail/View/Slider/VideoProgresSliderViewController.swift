@@ -15,6 +15,7 @@ final class VideoProgresSliderViewController: UIViewController {
     }
     
     func layout() {
+        self.view.backgroundColor = .white
         let mainStackView: UIStackView = .init(
             arrangedSubviews: [videoProgressSlider],
             axis: .horizontal,

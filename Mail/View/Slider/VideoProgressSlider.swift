@@ -15,14 +15,17 @@ class VideoProgressSlider: UISlider {
         super.draw(rect)
         // 右側（未再生側）のトラック画像
         if let maximumImage = makeTrackImage(size: rect.size, lineColor: .lightGray) {
-            setMaximumTrackImage(maximumImage.resizableImage(withCapInsets: .zero),
-                                 for: .normal)
+            setMaximumTrackImage(
+                maximumImage.resizableImage(withCapInsets: .zero, resizingMode: .stretch),
+                for: .normal
+            )
         }
         // 左側（再生済み側）のトラック画像
-        if let minimumImage = makeTrackImage(size: rect.size,
-                                             lineColor: .deepBlue) {
-            setMinimumTrackImage(minimumImage.resizableImage(withCapInsets: .zero),
-                                 for: .normal)
+        if let minimumImage = makeTrackImage(size: rect.size, lineColor: .deepBlue) {
+            setMinimumTrackImage(
+                minimumImage.resizableImage(withCapInsets: .zero, resizingMode: .stretch),
+                for: .normal
+            )
         }
         // つまみの画像
         let thumbImage: UIImage = .init(systemName: "circle.fill")!
