@@ -4,8 +4,6 @@ import SwiftUI
 class VideoProgressSlider: UISlider {
     /// スライダー(ライン)の高さ
     var lineHeight: CGFloat = 4.0
-    /// 間隔
-    var sideOffset: CGFloat = 0.0
     /// マーク背景色
     var markColor: UIColor = .lightYellow
     /// マーカー用レイヤー群
@@ -17,15 +15,13 @@ class VideoProgressSlider: UISlider {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        // スライダー全体から上下10ptずつ余白を取った描画領域
-        let innerRect = rect.insetBy(dx: 0.0, dy: 10.0)
         // 右側（未再生側）のトラック画像
-        if let maximumImage = makeTrackImage(size: innerRect.size, lineColor: .lightGray) {
+        if let maximumImage = makeTrackImage(size: rect.size, lineColor: .lightGray) {
             setMaximumTrackImage(maximumImage.resizableImage(withCapInsets: .zero),
                                  for: .normal)
         }
         // 左側（再生済み側）のトラック画像
-        if let minimumImage = makeTrackImage(size: innerRect.size,
+        if let minimumImage = makeTrackImage(size: rect.size,
                                              lineColor: .deepBlue) {
             setMinimumTrackImage(minimumImage.resizableImage(withCapInsets: .zero),
                                  for: .normal)
@@ -54,9 +50,9 @@ class VideoProgressSlider: UISlider {
         context.setLineWidth(lineHeight)
         context.setLineCap(.round)
         // 左端 → 右端に線を引く
-        context.move(to: CGPoint(x: sideOffset,
+        context.move(to: CGPoint(x: 0,
                                  y: innerRect.height / 2))
-        context.addLine(to: CGPoint(x: innerRect.size.width - sideOffset,
+        context.addLine(to: CGPoint(x: innerRect.size.width,
                                     y: innerRect.height / 2))
         context.setStrokeColor(lineColor.cgColor)
         context.strokePath()
@@ -74,21 +70,20 @@ class VideoProgressSlider: UISlider {
         guard !markerTimes.isEmpty else { return }
         // UISliderが実際に使っているトラック領域を取得
         let trackRect = self.trackRect(forBounds: bounds)
-        // sideOffset を考慮した実際の描画可能幅
-        let availableWidth = trackRect.width - sideOffset * 2
-        let trackMinX = trackRect.minX + sideOffset
+        // 描画可能領域
+        let availableWidth = trackRect.width
+        let trackMinX = trackRect.minX
+        // 1秒あたりの幅
         let markerWidth = availableWidth / duration
         for time in markerTimes {
             // 範囲外は無視
-            guard time >= 0, time <= duration else { continue }
-            // 0.0〜1.0 の割合に変換
-            let ratio = CGFloat(time / duration)
-            // マーカー中心のX座標 = トラック左端 + 有効幅 × 割合
-            let centerX = trackMinX + availableWidth * ratio
+            guard time >= 0, time < duration else { continue }
+            // time秒目の区間の左端
+            let originX = trackMinX + markerWidth * CGFloat(time)
             // マーカー用のレイヤーを作成
             let layer = CALayer()
             layer.backgroundColor = markColor.cgColor
-            layer.frame = CGRect(x: centerX - markerWidth / 2,
+            layer.frame = CGRect(x: originX,
                                  y: trackRect.midY - lineHeight / 2,
                                  width: markerWidth,
                                  height: lineHeight)
@@ -101,11 +96,14 @@ class VideoProgressSlider: UISlider {
 #Preview(traits: .sizeThatFitsLayout) {
     let videoProgressSlider: VideoProgressSlider = {
         let slider: VideoProgressSlider = .init()
-        let markerTimes: [TimeInterval] = [0, 3, 5, 10, 15, 29]
+        let markerTimes: [TimeInterval] = [0, 1, 3, 5, 10, 15, 29, 30]
         slider.markerTimes = markerTimes
         return slider
     }()
     UIViewWrapper(view: videoProgressSlider)
         .frame(width: .infinity, height: 48)
-        .padding(16)
+        .padding(.horizontal, 8)
+        .background{
+            Color.red
+        }
 }
