@@ -54,7 +54,7 @@ final class UserCell: UITableViewCell {
         iconImageView.anchor(width: 48, height: 48)
     }
     
-    func configure(user: User) {
+    func configure(user: SearchedUser) {
         
     }
     

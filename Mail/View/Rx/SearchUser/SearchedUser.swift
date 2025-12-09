@@ -1,6 +1,6 @@
 import Foundation
 /// ユーザー
-struct User: Codable {
+struct SearchedUser: Codable {
     var id: UUID
     var name: String
 }

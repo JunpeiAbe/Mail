@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 68370BE22D2D3E7600E9C88D /* RxSwift */; };
+		6844AD442DD649FA00DFC77B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6844AD432DD649FA00DFC77B /* RealmSwift */; };
 		68E8BF932D354AC100DD6BD7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 68E8BF922D354AC100DD6BD7 /* RxCocoa */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				View/AccessoryInputViewController.swift,
 			);
 			target = 68F69CE22D0705CC009609FD /* Mail */;
 		};
@@ -41,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6844AD442DD649FA00DFC77B /* RealmSwift in Frameworks */,
 				68E8BF932D354AC100DD6BD7 /* RxCocoa in Frameworks */,
 				68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */,
 			);
@@ -95,6 +98,7 @@
 			packageProductDependencies = (
 				68370BE22D2D3E7600E9C88D /* RxSwift */,
 				68E8BF922D354AC100DD6BD7 /* RxCocoa */,
+				6844AD432DD649FA00DFC77B /* RealmSwift */,
 			);
 			productName = Mail;
 			productReference = 68F69CE32D0705CC009609FD /* Mail.app */;
@@ -126,6 +130,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */,
+				6844AD402DD649FA00DFC77B /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 68F69CE42D0705CC009609FD /* Products */;
@@ -373,6 +378,14 @@
 				minimumVersion = 6.8.0;
 			};
 		};
+		6844AD402DD649FA00DFC77B /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -380,6 +393,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 68370BE12D2D3E7600E9C88D /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		6844AD432DD649FA00DFC77B /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6844AD402DD649FA00DFC77B /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		68E8BF922D354AC100DD6BD7 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
