@@ -5,9 +5,7 @@ class VideoProgressSlider: UISlider {
     /// スライダー(ライン)の高さ
     var lineHeight: CGFloat = 4.0
     /// マーク背景色
-    var markColor: UIColor = .lightYellow
-    /// マーカー用レイヤー群
-    private var markerLayers: [CALayer] = []
+    var markerColor: UIColor = .lightYellow
     /// 動画の総時間（秒）
     var duration: TimeInterval = 30
     /// マークしたい秒数（例: [5, 10]）
@@ -31,65 +29,46 @@ class VideoProgressSlider: UISlider {
         setThumbImage(thumbImage, for: .highlighted)
         setThumbImage(thumbImage, for: .normal)
     }
-
-    /// レイアウトが変わるたびにマーカー位置を更新（縦横回転にも対応）
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        makeMarkers()
-    }
-
-    /// 1本のトラック線だけを描画した UIImage を生成する
+    /// 線＋マーカーを描画した UIImage を生成する
     private func makeTrackImage(size: CGSize, lineColor: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            UIGraphicsEndImageContext()
-            return nil
-        }
-        let innerRect = CGRect(origin: .zero, size: size)
-        // トラックの線を描画
+        defer { UIGraphicsEndImageContext() }
+        
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        
+        let height = size.height
+        let width = size.width
+        let centerY = height / 2
+        // ベースのトラック線
         context.setLineWidth(lineHeight)
         context.setLineCap(.round)
-        // 左端 → 右端に線を引く
-        context.move(to: CGPoint(x: 0,
-                                 y: innerRect.height / 2))
-        context.addLine(to: CGPoint(x: innerRect.size.width,
-                                    y: innerRect.height / 2))
+        context.move(to: CGPoint(x: 0, y: centerY))
+        context.addLine(to: CGPoint(x: width, y: centerY))
         context.setStrokeColor(lineColor.cgColor)
         context.strokePath()
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
-
-    /// イベントポイントのマーカー設定
-    private func makeMarkers() {
-        // 既存マーカーを全て削除
-        markerLayers.forEach { $0.removeFromSuperlayer() }
-        markerLayers.removeAll()
-        guard duration > 0 else { return }
-        guard !markerTimes.isEmpty else { return }
-        // UISliderが実際に使っているトラック領域を取得
-        let trackRect = self.trackRect(forBounds: bounds)
-        // 描画可能領域
-        let availableWidth = trackRect.width
-        let trackMinX = trackRect.minX
+        // マーカー描画
+        guard duration > 0 else { return UIGraphicsGetImageFromCurrentImageContext() }
+        guard !markerTimes.isEmpty else { return UIGraphicsGetImageFromCurrentImageContext() }
         // 1秒あたりの幅
-        let markerWidth = availableWidth / duration
+        let markerWidth = width / duration
+        context.setFillColor(markerColor.cgColor)
+        
         for time in markerTimes {
             // 範囲外は無視
             guard time >= 0, time < duration else { continue }
-            // time秒目の区間の左端
-            let originX = trackMinX + markerWidth * CGFloat(time)
-            // マーカー用のレイヤーを作成
-            let layer = CALayer()
-            layer.backgroundColor = markColor.cgColor
-            layer.frame = CGRect(x: originX,
-                                 y: trackRect.midY - lineHeight / 2,
-                                 width: markerWidth,
-                                 height: lineHeight)
-            self.layer.addSublayer(layer)
-            markerLayers.append(layer)
+            // 指定秒の区間の左端
+            let originX = markerWidth * CGFloat(time)
+            
+            let rect = CGRect(
+                x: originX,
+                y: centerY - (lineHeight / 2),
+                width: markerWidth,
+                height: lineHeight
+            )
+            
+            context.fill(rect)
         }
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
 
