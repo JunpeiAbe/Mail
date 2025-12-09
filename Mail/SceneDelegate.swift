@@ -12,7 +12,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let viewController = RealmViewController()
+        let viewController = VideoProgresSliderViewController()
+        //let viewController = RealmViewController()
         window.rootViewController = viewController
         window.makeKeyAndVisible()
         self.window = window

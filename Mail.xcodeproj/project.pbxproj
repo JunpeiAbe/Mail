@@ -9,8 +9,23 @@
 /* Begin PBXBuildFile section */
 		68370BE32D2D3E7600E9C88D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 68370BE22D2D3E7600E9C88D /* RxSwift */; };
 		6844AD442DD649FA00DFC77B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6844AD432DD649FA00DFC77B /* RealmSwift */; };
+		685F70832EE834F2004BBAA0 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 6844AD432DD649FA00DFC77B /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		68E8BF932D354AC100DD6BD7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 68E8BF922D354AC100DD6BD7 /* RxCocoa */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		685F70842EE834F2004BBAA0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				685F70832EE834F2004BBAA0 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		68F69CE32D0705CC009609FD /* Mail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mail.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +101,7 @@
 				68F69CDF2D0705CC009609FD /* Sources */,
 				68F69CE02D0705CC009609FD /* Frameworks */,
 				68F69CE12D0705CC009609FD /* Resources */,
+				685F70842EE834F2004BBAA0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -176,7 +192,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -208,7 +224,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
