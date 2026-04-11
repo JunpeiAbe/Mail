@@ -13,7 +13,21 @@ final class ObservationViewController: UIViewController {
         super.viewDidLoad()
         firstLoad()
         layout()
-        bind()
+        if #available(iOS 26.0, *) {
+            
+        } else {
+            bind()
+        }
+    }
+    
+    override func updateProperties() {
+        super.updateProperties()
+        render()
+    }
+    
+    func render() {
+        self.countLabel.text = self.viewModel.countStr
+        self.selectButton.setTitle(self.viewModel.isSelectedStr, for: .normal)
     }
     
     func firstLoad() {
